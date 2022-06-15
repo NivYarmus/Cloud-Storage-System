@@ -1,0 +1,285 @@
+Ôªøusing System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GoGlobal
+{
+    #region defined classes
+    class Person
+    {
+        public Name Name { get; set; }
+        public Address Address { get; set; }
+
+        public Person(string FirstName, string LastName, string Street, string City)
+        {
+            this.Name = new Name(FirstName, LastName);
+            this.Address = new Address(Street, City);
+        }
+
+        public override string ToString()
+        {
+            return this.Name.ToString() + " " + this.Address.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            Person p = obj as Person;
+            return this.Name.Equals(p.Name) && this.Address.Equals(p.Address);
+        }
+    }
+
+    class Name
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+
+        public Name(string FirstName, string LastName)
+        {
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+        }
+
+        public override string ToString()
+        {
+            return $"First name: {this.FirstName}, Last name: {this.LastName}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            Name n = obj as Name;
+            return this.FirstName == n.FirstName && this.LastName == n.LastName;
+        }
+    }
+
+    class Address
+    {
+        public string Street { get; set; }
+        public string City { get; set; }
+
+        public Address(string Street, string City)
+        {
+            this.Street = Street;
+            this.City = City;
+        }
+
+        public override string ToString()
+        {
+            return $"City: {this.City}, Street: {this.Street}";
+        }
+
+        public override bool Equals(object obj)
+        {
+            Address a = obj as Address;
+            return this.Street == a.Street && this.City == a.City;
+        }
+    }
+    #endregion
+
+    #region utility
+    class Utility
+    {
+        #region algorithm
+        /*
+         * Class Node is the implementation of a graph for the A* algorithm
+         * parent : Node - represent the node closer to the start node
+         * distance : int - represent the distance from node to the start node
+         * person : Person - represents the person which the node represents in the graph
+         */
+        private class Node
+        {
+            public Node parent { get; set; }
+            public Person person { get; }
+            public int distance { get; set; }
+
+            public Node(Person p)
+            {
+                this.parent = null;
+                this.person = p;
+                this.distance = -1; //-1 represents distance of infinity
+            }
+        }
+
+        private class AStar
+        {
+            /*
+             * run function is the implementation of the A* algorithm
+             * ---parameters---
+             * start : Node - represents the start node
+             * end : Node - represents the end node
+             * nodes : List<Node> - represents all the nodes in the graph (must include end, start is not necessary since it will always be the shortest distance from start)
+             * 
+             * ---returns---
+             * int - the relation level between the start and end nodes
+             * 
+             * Would be more accurate to use UInt16/32/64 since relation level cannot be negative
+             * but question requirements asked for the function to return an int
+            */
+            public int run(Node start, Node end, List<Node> nodes)
+            {
+                List<Node> openList = new List<Node>();
+                openList.Add(start);
+                start.distance = 0;
+
+                while (openList.Count > 0)
+                {
+                    Node minDistanceNode = this.GetMinDistanceNode(openList);
+
+                    if (minDistanceNode.person.Equals(end.person))
+                    {
+                        this.PrintStations(minDistanceNode);
+                        return minDistanceNode.distance;
+                    }
+
+                    openList.Remove(minDistanceNode);
+
+                    foreach (Node neighbor in this.GetNeighbors(minDistanceNode, nodes))
+                    {
+
+                        int distance = minDistanceNode.distance + 1;
+                        if (distance < neighbor.distance || neighbor.distance == -1)
+                        {
+                            neighbor.parent = minDistanceNode;
+                            neighbor.distance = distance;
+
+                            if (!openList.Contains(neighbor))
+                                openList.Add(neighbor);
+                        }
+                    }
+                }
+                return -1;
+            }
+
+            private void PrintStations(Node node)
+            {
+                while (node != null)
+                {
+                    Console.WriteLine($"{node.distance}: {node.person}");
+                    node = node.parent;
+                }
+            }
+
+            /*
+             * IsRelated function checks if 2 people are directly related
+             * ---parameters---
+             * PersonA : Node - the first person
+             * PersonB : Node - the second person
+             * 
+             * ---returns---
+             * bool - indication if the people are related
+             * 
+             * 2 people are directly related if: FirstName and LastName are equal or City and Street are equal
+             */
+            private bool IsRelated(Node PersonA, Node PersonB)
+            {
+                return PersonA.person.Name.Equals(PersonB.person.Name) ||
+                    PersonA.person.Address.Equals(PersonB.person.Address);
+            }
+
+            /*
+             * GetMinDistanceNode returns the node in a list with the minimum distance from the strt node
+             * ---parameters---
+             * nodes : List<Node> - represents the openList in the A* algorithm
+             * 
+             * ---returns---
+             * Node - the node from the openList which is closest to the start node
+             * 
+             * If more than 1 node is in the shortest range from the start node the first one in the list will be picken
+             * The others will be picken as shortest range in the next iterations
+             */
+            private Node GetMinDistanceNode(List<Node> nodes)
+            {
+                Node minDistanceNode = nodes[0];
+                for (int i = 1; i < nodes.Count; i++)
+                    if (minDistanceNode.distance > nodes[i].distance)
+                        minDistanceNode = nodes[i];
+                return minDistanceNode;
+            }
+
+            /*
+             * GetNeighbors return a list of all people directly related to a specific person
+             * ---parameters---
+             * curr : Node - the node which we want to get his direct relations
+             * nodes : List<Node> - represents all the nodes in the graph (must include end, start is not necessary since it will always be the shortest distance from start)
+             * 
+             * ---returns---
+             * List<Node> - the nodes directly related to the curr node
+             * 
+             * 2 people are directly related if: IsRelated(PersonA, PersonB) and PersonA is not PersonB
+             */
+            private List<Node> GetNeighbors(Node curr, List<Node> nodes)
+            {
+                List<Node> neighbors = new List<Node>();
+
+                foreach (Node n in nodes)
+                {
+                    if (this.IsRelated(curr, n) && !curr.person.Equals(n.person))
+                        neighbors.Add(n);
+                }
+                return neighbors;
+            }
+        }
+        #endregion
+
+        private AStar algorithm;
+        private Person[] PersonArray;
+
+        public Utility()
+        {
+            PersonArray = null;
+            algorithm = new AStar();
+        }
+
+        public void Init(Person[] persons)
+        {
+            PersonArray = persons;
+        }
+
+        public int FindMinRelationLevel(Person PersonA, Person PersonB)
+        {
+            if (this.PersonArray is null)
+                throw new Exception("Must initialize person array.");
+
+            Node start = new Node(PersonA);
+            Node end = new Node(PersonB);
+
+            List<Node> nodes = new List<Node>();
+            foreach (Person p in PersonArray)
+                nodes.Add(new Node(p));
+
+            return this.algorithm.run(start, end, nodes);
+        }
+    }
+    #endregion
+
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Person[] PersonArray = new Person[] {
+            new Person("John", "Doe", "Rabin", "Tel-Aviv"),
+            new Person("Louis", "Laine", "Herzel", "Haifa"),
+            new Person("Chris", "Fays", "Brener", "Netanya"),
+            new Person("Sarah", "Labor", "Rabin", "Tel-Aviv"),
+            new Person("Cary", "Fernandez", "Peres", "Herzliya"),
+            new Person("Chris", "Fays", "Herzel", "Haifa"),
+            new Person("Harold", "Woodman", "Gandi", "Tel-Aviv"),
+            new Person("Michael", "Moen", "brener", "Netanya"),
+            new Person("Cary", "Fernandez", "Gandi", "Tel-Aviv"),
+            new Person("Thomas", "Phillips", "Herzel", "Tel-aviv"),
+            new Person("John", "Doe", "Brener", "Netanya"),
+            new Person("Sarah", "Labor", "Peres", "Herzliya")
+            };
+
+            Person PersonA = new Person("John", "Doe", "Rabin", "Tel-Aviv");
+            Person PersonB = new Person("Harold", "Woodman", "Gandi", "Tel-Aviv");
+
+            Utility u = new Utility();
+            u.Init(PersonArray);
+            Console.WriteLine("Relation level: " + u.FindMinRelationLevel(PersonA, PersonB));
+            Console.ReadKey();
+        }
+    }
+}
+K9ºïèªB°É_#-œ9.ÛÉ9ÆÇ“∫e`É◊ø¢ºÈ`?¡Ò©ÊÔ˙Jzb}$3ã⁄ª&

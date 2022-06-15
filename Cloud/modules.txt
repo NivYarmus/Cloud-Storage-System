@@ -1,0 +1,11 @@
+pycryptodome=3.14.1
+base64
+threading
+os
+binascii
+json
+copy
+abc
+socket
+sqlite3
+configparser

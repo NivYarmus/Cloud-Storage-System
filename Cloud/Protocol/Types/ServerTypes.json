@@ -1,0 +1,23 @@
+{
+    "Command":
+    {
+        "Query_Success":
+        {
+            "opcode": 1,
+            "template":
+            {
+                "description": "",
+                "extended_length": 0
+            }
+        },
+        "Query_Failed":
+        {
+            "opcode": 2,
+            "template":
+            {
+                "description": "",
+                "extended_length": 0
+            }
+        }
+    }
+}

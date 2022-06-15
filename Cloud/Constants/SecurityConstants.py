@@ -1,0 +1,2 @@
+AES_KEY_SIZE = 32
+SALT_SIZE = 8

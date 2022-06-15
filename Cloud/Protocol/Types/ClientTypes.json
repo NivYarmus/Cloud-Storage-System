@@ -1,0 +1,136 @@
+{
+    "ShortCommand":
+    {
+        "Sign_Up":
+        {
+            "opcode": 1,
+            "template":
+            {
+                "username": "",
+                "password": ""
+            }
+        },
+        "Log_In":
+        {
+            "opcode": 2,
+            "template":
+            {
+                "username": "",
+                "password": ""
+            }
+        },
+        "Create_Folder":
+        {
+            "opcode": 3,
+            "template":
+            {
+                "folder": 0,
+                "name": ""
+            }
+        },
+        "Get_Folders":
+        {
+            "opcode": 7,
+            "template":
+            {
+                "folder": 0
+            }
+        },
+        "Get_Files":
+        {
+            "opcode": 8,
+            "template":
+            {
+                "folder": 0
+            }
+        },
+        "Delete_File":
+        {
+            "opcode": 10,
+            "template":
+            {
+                "file": 0
+            }
+        },
+        "Rename_File":
+        {
+            "opcode": 11,
+            "template":
+            {
+                "file": 0,
+                "name": "",
+                "modify_time": 0
+            }
+        },
+        "Share_File":
+        {
+            "opcode": 6,
+            "template":
+            {
+                "file": 0,
+                "user": "",
+                "share_time": 0
+            }
+        },
+        "Get_Shared_Files":
+        {
+            "opcode": 9,
+            "template": {}
+        },
+        "Remove_Shared_File":
+        {
+            "opcode": 13,
+            "template":
+            {
+                "file": 0
+            }
+        }
+    },
+    "LongCommand":
+    {
+        "Download_File":
+        {
+            "opcode": 5,
+            "template":
+            {
+                "file": 0
+            }
+        },
+        "Upload_File":
+        {
+            "opcode": 4,
+            "template":
+            {
+                "folder": 0,
+                "name": 0,
+                "extended_length": 0,
+                "extension": "",
+                "upload_time": 0
+            }
+        },
+		"Update_File":
+		{
+			"opcode": 12,
+			"template":
+			{
+				"file": 0,
+				"extended_length": 0,
+				"modify_time": 0,
+				"extension": ""
+			}
+		}
+    },
+	"OtherCommands":
+	{
+		"Disconnect":
+		{
+			"opcode": 13,
+			"template": {}
+		},
+		"Quit":
+		{
+			"opcode": 14,
+			"template": {}
+		}
+	}
+}
