@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="NivDrive.MVVM.Views.LauncherViews.LauncherView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NivDrive.MVVM.Views.LauncherViews"
+             xmlns:viewmodel="clr-namespace:NivDrive.MVVM.ViewModels.LauncherViewModels"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodel:LauncherHomeViewModel}">
+            <local:LauncherHomeView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:LauncherSignUpViewModel}">
+            <local:LauncherSignUpView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:LauncherLogInViewModel}">
+            <local:LauncherLogInView/>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Column="0">
+            <Button Content="Exit" Click="Button_Click" DockPanel.Dock="Bottom"/>
+            
+            <StackPanel Orientation="Vertical" DockPanel.Dock="Top">
+                <RadioButton Content="Home" IsChecked="True" Command="{Binding goToHomeCommand}"
+                         Style="{StaticResource RadioButtonTheme}"/>
+                <RadioButton Content="Sign Up" Command="{Binding goToSignUpCommand}"
+                         Style="{StaticResource RadioButtonTheme}"/>
+                <RadioButton Content="Log In" Command="{Binding goToLogInCommand}"
+                         Style="{StaticResource RadioButtonTheme}"/>
+            </StackPanel>
+        </DockPanel>
+
+        <UserControl Grid.Column="1" Content="{Binding ViewModel}"/>
+    </Grid>
+</UserControl>

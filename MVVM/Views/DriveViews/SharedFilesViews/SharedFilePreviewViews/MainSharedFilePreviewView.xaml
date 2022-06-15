@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="NivDrive.MVVM.Views.DriveViews.SharedFilesViews.SharedFilePreviewViews.MainSharedFilePreviewView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:NivDrive.MVVM.Views.DriveViews.SharedFilesViews.SharedFilePreviewViews"
+             xmlns:iconPack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d">
+
+    <StackPanel Orientation="Vertical">
+        <TextBlock>
+            <Run Text="Username: "/>
+            <Run Text="{Binding username, Mode=OneWay}"/>
+        </TextBlock>
+
+        <TextBlock>
+            <Run Text="File name: "/>
+            <Run Text="{Binding fileName, Mode=OneWay}"/>
+        </TextBlock>
+
+        <TextBlock>
+            <Run Text="File extension: "/>
+            <Run Text="{Binding fileExtension, Mode=OneWay}"/>
+        </TextBlock>
+
+        <TextBlock>
+            <Run Text="File size: "/>
+            <Run Text="{Binding fileSize, Mode=OneWay}"/>
+        </TextBlock>
+
+        <TextBlock>
+            <Run Text="Modify time: "/>
+            <Run Text="{Binding fileModifyTime, Mode=OneWay}"/>
+        </TextBlock>
+
+        <TextBlock>
+            <Run Text="Share time: "/>
+            <Run Text="{Binding fileShareTime, Mode=OneWay}"/>
+        </TextBlock>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 10 0 10">
+            <Button Command="{Binding DownloadFile}" CommandParameter="{Binding}" Width="50" Height="30" Margin="0 0 5 0">
+                <Button.Template>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical" Background="LightPink">
+                            <iconPack:PackIconMaterial Kind="FileDownload" Style="{StaticResource RainbowForegroundTheme}"
+                                                   HorizontalAlignment="Center"/>
+                            <TextBlock Text="Download" FontSize="10"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Command="{Binding RemoveFile}" CommandParameter="{Binding}" Margin="0 0 5 0" Width="50" Height="30">
+                <Button.Template>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical" Background="LightPink">
+                            <iconPack:PackIconMaterial Kind="ArchiveRemove" Style="{StaticResource RainbowForegroundTheme}"
+                                                   HorizontalAlignment="Center"/>
+                            <TextBlock Text="Remove" FontSize="10" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Command="{Binding RenameFile}" Margin="0 0 5 0" Width="50" Height="30">
+                <Button.Template>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical" Background="LightPink">
+                            <iconPack:PackIconMaterial Kind="RenameBox" Style="{StaticResource RainbowForegroundTheme}"
+                                                   HorizontalAlignment="Center"/>
+                            <TextBlock Text="Rename" FontSize="10" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button Width="50" Height="30" Command="{Binding UpdateFile}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <StackPanel Orientation="Vertical" Background="LightPink">
+                            <iconPack:PackIconMaterial Kind="Update" Style="{StaticResource RainbowForegroundTheme}"
+                                                   HorizontalAlignment="Center"/>
+                            <TextBlock Text="Update" FontSize="10" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </StackPanel>
+
+        <Button Content="Go Back" Command="{Binding Cancel}"/>
+    </StackPanel>
+</UserControl>

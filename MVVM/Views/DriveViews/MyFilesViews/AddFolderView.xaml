@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="NivDrive.MVVM.Views.DriveViews.MyFilesViews.AddFolderView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NivDrive.MVVM.Views.DriveViews.MyFilesViews"
+        xmlns:viewModel="clr-namespace:NivDrive.MVVM.ViewModels.DriveViewModels.MyFilesViewModels"
+             xmlns:iconPack="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             mc:Ignorable="d"
+        Background="Transparent">
+
+    <StackPanel Orientation="Vertical" Background="Transparent">
+        <TextBlock>
+            <Run Text="Current path: "/>
+            <Run Text="{Binding folderPath, Mode=OneWay}"/>
+        </TextBlock>
+
+        <TextBlock Text="Folder name: "/>
+        <TextBox Text="{Binding folderName, UpdateSourceTrigger=PropertyChanged}" MaxLength="15"/>
+
+        <Button Command="{Binding AddFolder}" CommandParameter="{Binding}" Margin="0 10 0 10" Width="50" Height="30">
+            <Button.Template>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical" Background="LightPink">
+                        <iconPack:PackIconMaterial Kind="FolderUpload" Style="{StaticResource RainbowForegroundTheme}"
+                                                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Add folder" FontSize="10" HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        
+        <Button Content="Cancel" Command="{Binding Cancel}"/>
+    </StackPanel>
+</UserControl>
